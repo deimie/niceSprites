@@ -1,11 +1,37 @@
+---
+permalink: /
+layout: default
+---
 <html>
   
   <head>
+    <style>
+      h1 {
+        text-align: center;
+      }
+      button {
+        margin:auto;
+        display:block;
+      }
+    </style>
     
   </head>
   
   <body>
-    <h1> Nice Sprites </h1>
+    <h1> Welcome to Nice Sprites! </h1>
+
+    <div class="divContainer">
+      <span>
+        This is a 2D sprite test programmed in HTML & JS and rendered with jekyll. 
+        The "playground" page lets you control a character with full movement mechanics and animations. 
+        The "spritesheet" page simply displays every sprite that the character uses in their animations.
+        The "code" page displays and explains the code behind this project.
+      </span>
+    </div>
+
+    <a href="{{site.baseurl}}/playground/"><button class="btn success"> Get Started </button></a>
+
   </body>
+
   
 </html>
