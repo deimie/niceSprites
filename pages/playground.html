@@ -3,3 +3,107 @@ title: Playground
 permalink: /playground
 layout: default
 ---
+
+{% assign hash = site.data.animations %}
+{% assign sprite_file = site.baseurl | append: "/images/animations" %}
+
+{% assign yPixels = 564 %}
+{% assign xPixels = 614 %}
+
+<div id="boy" class="sprite"></div>
+
+<style>
+    .sprite {
+        height: {{yPixels}}px;
+        width: {{xPixels}}px;
+        background-image: url('{{sprite_file}}/idle/Idle (1).png');
+    }
+</style>
+
+<script>
+    let sprite = document.getElementById("boy");
+    let keyHeld = false;
+    let isJump = false;
+
+    window.addEventListener("keydown", (event) => {
+    if (event.key === "d" && keyHeld === false) {
+      event.preventDefault();
+      sprite.style.transform = "scaleX(1)";
+      clearInterval(walking);
+      clearInterval(idling);
+      walkAnimation();
+      keyHeld = true;
+    }
+      
+    else if (event.key === "a" && keyHeld === false) {
+      event.preventDefault();
+      sprite.style.transform = "scaleX(-1)";
+      clearInterval(walking);
+      clearInterval(idling);
+      walkAnimation();
+      keyHeld = true;
+    }
+
+    else if (event.key === "w" && isJump === false) {
+      event.preventDefault();
+      clearInterval(walking);
+      clearInterval(idling);
+      isJump = true;
+      jumpAnimation();
+    }
+  });
+
+  window.addEventListener("keyup", (event) => {
+    keyHeld = false;
+    clearInterval(walking);
+    clearInterval(idling);
+    idleAnimation();
+  });
+
+    var idling;
+    function idleAnimation() {
+        let i = 1;
+        idling = setInterval(function() {
+          i++;
+          sprite.style.backgroundImage = "url('{{sprite_file}}/idle/Idle (" + i + ").png')";
+
+          if(i >= 15) {
+              i = 1;
+          }
+    }, 80);
+    }
+    
+    var walking;
+    function walkAnimation() {
+        let i = 1;
+        walking = setInterval(function() {
+          i++;
+          sprite.style.backgroundImage = "url('{{sprite_file}}/walk/Walk (" + i + ").png')";
+
+          if(i >= 15) {
+              i = 1;
+          }
+    }, 80);
+    }
+
+    function jumpAnimation() {
+      let i = 1;
+        jumping = setInterval(function(){
+        i++;
+        sprite.style.backgroundImage = "url('{{sprite_file}}/jump/Jump (" + i + ").png')";
+
+        if(i >= 15) {
+              i = 1;
+              clearInterval(jumping);
+              isJump = false;
+          }
+      }, 80);
+    }
+
+
+
+
+    
+
+    
+</script>

@@ -1,0 +1,15 @@
+- Idle:
+  path: "images/animations/idle"
+  frames: 15
+- Walk:
+  path: "images/animations/walk"
+  frames: 15
+- Run:
+  path: "images/animations/run"
+  frames: 15
+- Jump:
+  path: "images/animations/jump"
+  frames: 15
+- Dead:
+  path: "images/animations/dead"
+  frames: 15
