@@ -7,57 +7,83 @@ layout: default
 {% assign hash = site.data.animations %}
 {% assign sprite_file = site.baseurl | append: "/images/animations" %}
 
-{% assign yPixels = 564 %}
-{% assign xPixels = 614 %}
+{% assign yPixels = 509 %}
+{% assign xPixels = 365 %}
 
-<div id="boy" class="sprite"></div>
+<div class="playground">
+  <div id="boy" class="sprite"></div>
+</div>
 
 <style>
     .sprite {
+        scale:50%;
         height: {{yPixels}}px;
         width: {{xPixels}}px;
         background-image: url('{{sprite_file}}/idle/Idle (1).png');
+        background-repeat: no-repeat;
+        margin-left: 0px;
     }
+
 </style>
 
 <script>
+    
+
     let sprite = document.getElementById("boy");
-    let keyHeld = false;
-    let isJump = false;
+    let keyHeld = false; // if key is pressed multiple times without being lifted (ex. holding down a key), ignore all new inputs
+    let isJump = false; // while character isJump == true, lock all other inputs until false again 
+    let isRight = true;
+    let posX = 0;
 
     window.addEventListener("keydown", (event) => {
-    if (event.key === "d" && keyHeld === false) {
+    if (event.key === "d" && keyHeld === false && isJump === false) {
       event.preventDefault();
-      sprite.style.transform = "scaleX(1)";
+      sprite.style.transform = "scaleX(1)"; // flip sprite to right-facing
+      isRight = true;
+      keyHeld = true;
+
+      // stop all other animation loops
       clearInterval(walking);
       clearInterval(idling);
+
       walkAnimation();
-      keyHeld = true;
     }
       
-    else if (event.key === "a" && keyHeld === false) {
+    else if (event.key === "a" && keyHeld === false && isJump === false) {
       event.preventDefault();
-      sprite.style.transform = "scaleX(-1)";
+      sprite.style.transform = "scaleX(-1)"; // flip sprite to left-facing
+      isRight = false;
+      keyHeld = true;
+
+      // stop all other animation loops
       clearInterval(walking);
       clearInterval(idling);
+
       walkAnimation();
-      keyHeld = true;
     }
 
     else if (event.key === "w" && isJump === false) {
       event.preventDefault();
+      isJump = true;
+
+      // stop all other animation loops
       clearInterval(walking);
       clearInterval(idling);
-      isJump = true;
+
       jumpAnimation();
     }
   });
 
   window.addEventListener("keyup", (event) => {
-    keyHeld = false;
-    clearInterval(walking);
-    clearInterval(idling);
-    idleAnimation();
+    if(isJump === false) {
+      keyHeld = false;
+
+      // stop all other animation loops
+      clearInterval(walking);
+      clearInterval(idling);
+      idleAnimation();
+    }
+    
   });
 
     var idling;
@@ -80,6 +106,15 @@ layout: default
           i++;
           sprite.style.backgroundImage = "url('{{sprite_file}}/walk/Walk (" + i + ").png')";
 
+          if(isRight === true) {
+            posX+=7;
+            sprite.style.marginLeft = posX + "px";
+          } 
+          else {
+            posX-=7;
+            sprite.style.marginLeft = posX + "px";
+          }
+
           if(i >= 15) {
               i = 1;
           }
@@ -96,14 +131,10 @@ layout: default
               i = 1;
               clearInterval(jumping);
               isJump = false;
+              keyHeld = false;
+              idleAnimation();
           }
       }, 80);
     }
-
-
-
-
-    
-
     
 </script>
