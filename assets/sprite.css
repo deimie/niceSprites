@@ -1,0 +1,11 @@
+.sprite {
+    background-image: url('/niceSprites/images/animations/idle/Idle (1).png');
+    margin-left: 0px;
+    height: 169.6666667px;
+    width: 121.6666667px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position:absolute;
+    left:10px;
+    bottom:473px;
+}
