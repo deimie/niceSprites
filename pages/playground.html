@@ -4,27 +4,28 @@ permalink: /playground
 layout: default
 ---
 
-{% assign hash = site.data.animations %}
 {% assign sprite_file = site.baseurl | append: "/images/animations" %}
 
-{% assign yPixels = 509 %}
-{% assign xPixels = 365 %}
-
-<div class="playground">
-  <div id="boy" class="sprite"></div>
-</div>
-
+<div class="background"></div>
 <style>
-    .sprite {
-        scale:50%;
-        height: {{yPixels}}px;
-        width: {{xPixels}}px;
-        background-image: url('{{sprite_file}}/idle/Idle (1).png');
-        background-repeat: no-repeat;
-        margin-left: 0px;
-    }
-
+  .background {
+    background-image: url('images/backgrounds/yuppers.jpeg');
+    position:absolute;
+    width: 6000px;
+    height:300px;
+    z-index:-1;
+    left:0px;
+    background-size:contain;
+  }
+  html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 </style>
+
+<div id="boy" class="sprite"></div>
+
+<link rel="stylesheet" href="{{ site.baseurl }}/assets/sprite.css">
 
 <script>
     
@@ -33,7 +34,7 @@ layout: default
     let keyHeld = false; // if key is pressed multiple times without being lifted (ex. holding down a key), ignore all new inputs
     let isJump = false; // while character isJump == true, lock all other inputs until false again 
     let isRight = true;
-    let posX = 0;
+    let posX = 10;
 
     window.addEventListener("keydown", (event) => {
     if (event.key === "d" && keyHeld === false && isJump === false) {
@@ -108,11 +109,11 @@ layout: default
 
           if(isRight === true) {
             posX+=7;
-            sprite.style.marginLeft = posX + "px";
+            sprite.style.left = posX + "px";
           } 
           else {
             posX-=7;
-            sprite.style.marginLeft = posX + "px";
+            sprite.style.left = posX + "px";
           }
 
           if(i >= 15) {
