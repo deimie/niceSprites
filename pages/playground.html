@@ -32,7 +32,7 @@ layout: default
     
 
     let sprite = document.getElementById("boy");
-    let keyHeld = false; // if key is pressed multiple times without being lifted (ex. holding down a key), ignore all new inputs
+    //let keyHeld = false; // if key is pressed multiple times without being lifted (ex. holding down a key), ignore all new inputs
     let isJump = false; // while character isJump == true, lock all other inputs until false again 
     let isRight = true; // if character is facing right
     let isShift = false; // if shift key is held
@@ -43,51 +43,30 @@ layout: default
     let aHeld = false;
 
     window.addEventListener("keydown", (event) => {
-    if (event.key === "d" && keyHeld === false && isJump === false) {
+    if (event.key === "d" && aHeld === false && dHeld === false && isJump === false) {
       event.preventDefault();
       sprite.style.transform = "scaleX(1)"; // flip sprite to right-facing
       isRight = true;
-      keyHeld = true;
+      dHeld = true;
 
       // stop all other animation loops
-      clearInterval(walking);
       clearInterval(idling);
       clearInterval(running);
 
-      if (isShift === true) {
-        console.log("Running Right");
-        runAnimation();
-      } else {
-        console.log("Walking Right");
-        walkAnimation();
-      }
-    }
-    else if (event.shiftKey) {
-      event.preventDefault();
-      isShift = true;
-      keyHeld = false;
-      console.log("isShift: " + isShift);
+      runAnimation()
     }
       
-    else if (event.key === "a" && keyHeld === false && isJump === false) {
+    else if (event.key === "a" && aHeld === false && dHeld === false && isJump === false) {
       event.preventDefault();
       sprite.style.transform = "scaleX(-1)"; // flip sprite to left-facing
       isRight = false;
-      keyHeld = true;
+      aHeld = true;
 
       // stop all other animation loops
-      clearInterval(walking);
       clearInterval(idling);
       clearInterval(running);
 
-      if (isShift === true) {
-        console.log("Running Left");
-        runAnimation();
-      } else {
-        console.log("Walking Left");
-        walkAnimation();
-      }
-      
+      runAnimation();
     }
 
     else if (event.key === "w" && isJump === false) {
@@ -95,7 +74,6 @@ layout: default
       isJump = true;
 
       // stop all other animation loops
-      clearInterval(walking);
       clearInterval(idling);
       clearInterval(running);
 
@@ -106,15 +84,17 @@ layout: default
   });
 
   window.addEventListener("keyup", (event) => {
-    if(!event.shiftKey) {
-      isShift = false;
-      console.log("isShift: " + isShift);
-    }
     if(isJump === false) {
-      keyHeld = false;
-
+      if(event.key === "a") {
+        aHeld = false; 
+        console.log("A Release");
+      }
+      else if (event.key === "d") {
+        dHeld = false;
+        console.log("D Release");
+    }
+      
       // stop all other animation loops
-      clearInterval(walking);
       clearInterval(idling);
       clearInterval(running);
 
@@ -138,35 +118,6 @@ layout: default
     }, 80);
     }
     
-    var walking;
-    function walkAnimation() {
-        let i = 1;
-        velocityX = 0;
-        walking = setInterval(function() {
-          i++;
-          sprite.style.backgroundImage = "url('{{sprite_file}}/walk/Walk (" + i + ").png')";
-
-          if(isRight === true) {
-            if(velocityX <= 4) {
-              velocityX+=1;
-            }
-            posX += velocityX;
-            sprite.style.left = posX + "px";
-          } 
-          else {
-            if(velocityX <= 4) {
-              velocityX+=1;
-            }
-            posX -= velocityX;
-            sprite.style.left = posX + "px";
-          }
-          
-          if(i >= 15) {
-              i = 1;
-          }
-    }, 80);
-    }
-
     var running;
     function runAnimation() {
         let i = 1;
@@ -217,7 +168,8 @@ layout: default
               i = 1;
               clearInterval(jumping);
               isJump = false;
-              keyHeld = false;
+              aHeld = false;
+              dHeld = false;
               idleAnimation();
           }
       }, 80);
