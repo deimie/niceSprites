@@ -4,9 +4,10 @@ permalink: /playground
 layout: default
 ---
 
+{% assign hash = site.data.boy_metadata %}
 {% assign sprite_file = site.baseurl | append: "/images/animations" %}
 
-<div class="background"></div>
+<div class="background" id="background"></div>
 <style>
   .background {
     background-image: url('images/backgrounds/background.jpeg');
@@ -29,9 +30,9 @@ layout: default
 <link rel="stylesheet" href="{{ site.baseurl }}/assets/sprite.css">
 
 <script>
-    
-
+  
     let sprite = document.getElementById("boy");
+    let background = document.getElementById("background");
     //let keyHeld = false; // if key is pressed multiple times without being lifted (ex. holding down a key), ignore all new inputs
     let isJump = false; // while character isJump == true, lock all other inputs until false again 
     let isRight = true; // if character is facing right
@@ -41,6 +42,7 @@ layout: default
 
     let dHeld = false
     let aHeld = false;
+    background.style.left=0;
 
     window.addEventListener("keydown", (event) => {
     if (event.key === "d" && aHeld === false && dHeld === false && isJump === false) {
@@ -109,6 +111,7 @@ layout: default
         let i = 1;
         idling = setInterval(function() {
           i++;
+          
           sprite.style.backgroundImage = "url('{{sprite_file}}/idle/Idle (" + i + ").png')";
           velocityX = 0; // reset velocity
 
@@ -126,19 +129,22 @@ layout: default
           i++;
           sprite.style.backgroundImage = "url('{{sprite_file}}/run/Run (" + i + ").png')";
 
-          if(isRight === true) {
+          if(isRight === false) {
             if(velocityX <= 10) { // max velocity
               velocityX++; 
             }
             posX += velocityX; // shift position based on velocity
-            sprite.style.left = posX + "px"; // update sprite to follow position
+            background.style.left = posX + "px";
+
           } 
           else { // same as above but for left motion
             if(velocityX <= 10) {
               velocityX++;
             }
             posX -= velocityX;
-            sprite.style.left = posX + "px";
+            background.style.left = posX + "px";
+
+            
           }
           
           if(i >= 15) {
@@ -153,15 +159,15 @@ layout: default
         i++;
         sprite.style.backgroundImage = "url('{{sprite_file}}/jump/Jump (" + i + ").png')";
 
-        if (isRight === true) { // diminishes velocity over time as opposed to a hard stop on jump
+        if (isRight === false) { // diminishes velocity over time as opposed to a hard stop on jump
           posX += velocityX;
           velocityX *=.9;
-          sprite.style.left = posX + "px";
+          background.style.left = posX + "px";
         }
         else {
           posX -= velocityX;
           velocityX *=.9;
-          sprite.style.left = posX + "px";
+          background.style.left = posX + "px";
         }
         
         if(i >= 15) {

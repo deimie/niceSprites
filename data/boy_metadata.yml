@@ -1,0 +1,12 @@
+- Idle:
+  row: 0
+  col: 0
+  frames: 15
+- Jump:
+  row: 0
+  col: 16
+  frames: 15
+- Run:
+  row: 0
+  col: 31
+  frames: 15
